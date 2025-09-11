@@ -1,28 +1,70 @@
 <br>
+<h1 align="center">
+Fiap Registro de Usuário API
+</h1>
+<br>
 
-<h1 align="center">🍽️ Fiap Registra Usuário API</h1>
+## 💬 Sobre o repositório
 
-<p align="center">
-  <em>Módulo inicial do sistema unificado de gestão para restaurantes</em>
-</p>
+Este repositório faz parte do projeto de desenvolvimento de um sistema de gestão unificado para restaurantes, criado em parceria com estudantes como solução colaborativa para reduzir custos e otimizar processos.
 
+Este módulo tem como objetivo fornecer a base para **autenticação e gerenciamento de usuários**, permitindo que clientes e administradores possam futuramente interagir de forma segura com as demais funcionalidades da plataforma.
 
+A construção do projeto segue uma **abordagem por fases**, garantindo:
 
-## 💬 Sobre o Repositório
+- Evolução gradual das funcionalidades;
+- Flexibilidade para ajustes conforme feedback dos restaurantes e clientes;
+- Escalabilidade para suportar novos módulos (pedidos online, avaliações, gestão de cardápio, etc.).
 
-Este repositório faz parte do projeto de desenvolvimento de um **sistema de gestão unificado para restaurantes**, criado em parceria com estudantes como solução colaborativa para **reduzir custos** e **otimizar processos**.
+---
 
-🔐 Este módulo corresponde à **fase inicial**, responsável pelo **registro e gerenciamento de usuários**, servindo como base para autenticação e acesso às funcionalidades futuras.
+## 🏗️ Funcionalidades implementadas
 
-A construção do projeto segue uma abordagem **por fases**, o que garante:
-- 🚀 **Evolução gradual** das funcionalidades
-- 🔄 **Flexibilidade** para ajustes conforme feedback de restaurantes e clientes
-- 📈 **Escalabilidade** para suportar novos módulos *(pedidos online, avaliações, gestão de cardápio, etc.)*
+- Camada de **Domain** (`Usuario` e `Endereco`) e **Entity** (`UsuarioEntity` com `Endereco` embutido);
+- **GlobalExceptionHandler** com exceptions customizadas;
+- **Swagger/OpenAPI** configurado para documentação e testes interativos da API;
+- **Docker Compose** com PostgreSQL totalmente funcional;
+- Configuração de datasource via `application.yml` para integração com o banco de dados.
+
+---
+
+## 💻 Swagger / OpenAPI
+
+A API está **documentada com Swagger**, permitindo que você:
+
+- Consulte todos os endpoints disponíveis;
+- Veja os parâmetros e tipos esperados;
+- Teste requisições diretamente pelo navegador.
+
+Acesse o Swagger UI em:  
+[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+
+---
 
 ## ⚙️ Pré-requisitos
 
-Antes de executar o projeto, certifique-se de ter instalado:
-- ☕ **Java 21**
-- 📦 **Maven**
-- 🐘 **PostgreSQL**  
+- Java 21
+- Maven
+- Docker & Docker Compose
+- PostgreSQL (via Docker Compose)
 
+---
+
+## 🚀 Como rodar a aplicação
+
+1. **Inicie o banco de dados** via Docker Compose:
+
+```bash
+docker-compose up -d
+```
+
+2. **Execute a aplicação**
+
+```bash
+mvn spring-boot:run
+```
+3. **Acesse a aplicação no navegador**
+
+```arduino
+http://localhost:8080/
+```
