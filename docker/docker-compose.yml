@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15          # versão do Postgres
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres      # usuário do banco
+      POSTGRES_PASSWORD: FIAP_ADJT  # senha do banco
+      POSTGRES_DB: registra_usuario_db     # nome do banco
+    ports:
+      - "5432:5432"             # mapeia a porta para localhost
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres-data:

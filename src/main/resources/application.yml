@@ -1,33 +1,56 @@
 spring:
   application:
     name: Registro de Usuario
+
+  # ==========================
+  # Datasource / Hikari
+  # ==========================
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql:registra_usuario_db
+    url: jdbc:postgresql://localhost:5432/registra_usuario_db
     username: postgres
     password: FIAP_ADJT
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 10
+      idle-timeout: 30000
+      pool-name: HikariPool-RegistroUsuario
+
+  # ==========================
+  # JPA / Hibernate
+  # ==========================
   jpa:
     hibernate:
-      ddl-auto: update
-  profiles:
+      ddl-auto: update                # altera o schema automaticamente
     properties:
       hibernate:
-        temp:
-          use_jdbc_metadata_defaults: false
+        boot:
+          allow_jdbc_metadata_access: true   # substitui o deprecated use_jdbc_metadata_defaults
         format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        jdbc:
-          url: jdbc:postgresql://postgresql:5432/registra_usuario_db
-      active: dev
-      logging:
-        level:
-          org:
-            springframework:
-              orm:
-                jpa: DEBUG
-            hibernate:
-              SQL: DEBUG
-              type: TRACE
+    open-in-view: false                 # boa prática para evitar lazy loading em views
+
+  # ==========================
+  # Perfis
+  # ==========================
+  profiles:
+    active: dev
+
+  # ==========================
+  # SQL Init
+  # ==========================
   sql:
     init:
       mode: always
+
+  # ==========================
+  # Logging detalhado para debug
+  # ==========================
+  logging:
+    level:
+      org:
+        springframework:
+          orm:
+            jpa: DEBUG
+        hibernate:
+          SQL: DEBUG
+          type: TRACE
