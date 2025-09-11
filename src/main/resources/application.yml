@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: Registro de Usuario
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql:registra_usuario_db
+    username: postgres
+    password: FIAP_ADJT
+  jpa:
+    hibernate:
+      ddl-auto: update
+  profiles:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          url: jdbc:postgresql://postgresql:5432/registra_usuario_db
+      active: dev
+      logging:
+        level:
+          org:
+            springframework:
+              orm:
+                jpa: DEBUG
+            hibernate:
+              SQL: DEBUG
+              type: TRACE
+  sql:
+    init:
+      mode: always
