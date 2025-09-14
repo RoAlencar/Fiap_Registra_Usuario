@@ -22,6 +22,11 @@ A construção do projeto segue uma **abordagem por fases**, garantindo:
 
 - Camada de **Domain** (`Usuario` e `Endereco`) e **Entity** (`UsuarioEntity` com `Endereco` embutido);
 - **GlobalExceptionHandler** com exceptions customizadas;
+- **CRUD de Usuário**:
+  - Criar usuário
+  - Buscar usuário por Nome
+  - Atualizar usuário
+  - Deletar usuário
 - **Swagger/OpenAPI** configurado para documentação e testes interativos da API;
 - **Docker Compose** com PostgreSQL totalmente funcional;
 - Configuração de datasource via `application.yml` para integração com o banco de dados.
