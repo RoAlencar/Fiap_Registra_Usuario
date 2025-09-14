@@ -1,8 +1,6 @@
 package br.com.fiap.app.usuario.domain;
 
 import br.com.fiap.app.usuario.adapter.out.jpa.usuario.entities.UsuarioEntity;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.Embedded;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

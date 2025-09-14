@@ -3,11 +3,14 @@ package br.com.fiap.app.usuario.infrastructure.exception;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.AddressRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.DuplicateEmailException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.EmailRequiredException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.ModificaUsuarioException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.NameRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordRequiredException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.UserNotFoundException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.UserRequiredException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,20 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ModificaUsuarioException.class)
+    public ResponseEntity<ObjectNode> handleModificaUsuarioException(ModificaUsuarioException ex){
+        log.error("[Usuario - Atualiza Usuario] Não foi possivel atualizar o usuário");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageConverter("Não foi possivel atualizar o usuário"));
+    }
+
+    //TODO -> Validar se essa forma vai ser efetiva E/OU achar outra forma.
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ObjectNode> handleUserNotFoundException(UserNotFoundException ex, HttpServletRequest request) {
+        String httpMethod = request.getMethod();
+        log.error("[Usuario - {}] O usuario não encontrado.", httpMethod);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageConverter("O usuario não foi encontrado."));
+    }
 
     @ExceptionHandler(AddressRequiredException.class)
     public ResponseEntity<ObjectNode> handleAddressRequiredException(AddressRequiredException ex) {
