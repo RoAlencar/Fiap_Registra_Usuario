@@ -22,14 +22,19 @@ public class UsuarioJpaRepositoryPortAdapter implements UsuarioRepositoryPort {
     }
 
     @Override
-    public Optional<Usuario> findByName(String name) {
-        return usuarioJpaRepository.findByName(name)
+    public Optional<Usuario> findByNome(String nome) {
+        return usuarioJpaRepository.findByNome(nome)
                 .map(UsuarioEntity::toDomain);
     }
 
     @Override
     public Optional<Usuario> findById(Long id) {
         return usuarioJpaRepository.findById(id).map(UsuarioEntity::toDomain);}
+
+    @Override
+    public Optional<Usuario> findByEmail(String email) {
+        return usuarioJpaRepository.findByEmail(email).map(UsuarioEntity::toDomain);
+    }
 
     @Override
     public Usuario save(Usuario usuario) {

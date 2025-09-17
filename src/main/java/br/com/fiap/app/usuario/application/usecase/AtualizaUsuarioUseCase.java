@@ -6,6 +6,7 @@ import br.com.fiap.app.usuario.application.port.AtualizaUsuarioUseCasePort;
 import br.com.fiap.app.usuario.application.port.UsuarioRepositoryPort;
 import br.com.fiap.app.usuario.domain.Usuario;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.ModificaUsuarioException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -18,13 +19,21 @@ public class AtualizaUsuarioUseCase implements AtualizaUsuarioUseCasePort {
     private final ModelMapper modelMapper;
 
     @Override
-    public AtualizaUsuarioResponse atualizaUsuario(AtualizaUsuarioDto dto) throws ModificaUsuarioException {
-        Usuario usuarioExistente = usuarioRepositoryPort.findByName(dto.getNome())
-                .orElseThrow(ModificaUsuarioException::new);
+    public AtualizaUsuarioResponse atualizaUsuario(AtualizaUsuarioDto dto)
+            throws ModificaUsuarioException, UserNotFoundException {
 
-        modelMapper.map(dto, usuarioExistente);
+        Usuario usuarioExistente = usuarioRepositoryPort.findByNome(dto.getNome())
+                .orElseThrow(UserNotFoundException::new);
 
-        Usuario atualizaUsuario = usuarioRepositoryPort.save(usuarioExistente);
-        return modelMapper.map(atualizaUsuario, AtualizaUsuarioResponse.class);
+       try{
+           usuarioExistente.setNome(dto.getNome());
+           usuarioExistente.setEmail(dto.getEmail());
+           usuarioExistente.setEndereco(dto.getEndereco());
+
+           Usuario usuarioAtualizado = usuarioRepositoryPort.save(usuarioExistente);
+           return modelMapper.map(usuarioAtualizado, AtualizaUsuarioResponse.class);
+       } catch (Exception e){
+           throw new ModificaUsuarioException();
+       }
     }
 }
