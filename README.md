@@ -27,6 +27,7 @@ A construção do projeto segue uma **abordagem por fases**, garantindo:
   - Buscar usuário por Nome
   - Atualizar usuário
   - Deletar usuário
+- Validação de e-mail único no cadastro/atualização;
 - **Swagger/OpenAPI** configurado para documentação e testes interativos da API;
 - **Docker Compose** com PostgreSQL totalmente funcional;
 - Configuração de datasource via `application.yml` para integração com o banco de dados.
@@ -73,3 +74,11 @@ mvn spring-boot:run
 ```arduino
 http://localhost:8080/
 ```
+
+---
+
+## 📝 Observações importantes
+
+- O método **findByName** do repositório JPA foi atualizado para **findByNome** para refletir corretamente o campo da entidade **UsuarioEntity**.
+- Use case e controller foram ajustados para validação de duplicidade de e-mail
+- Swagger atualizado com a versão mais recente do **springdoc-openapi**.
