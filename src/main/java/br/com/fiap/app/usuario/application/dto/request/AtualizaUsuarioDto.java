@@ -25,12 +25,11 @@ public class AtualizaUsuarioDto {
     private Endereco endereco;
 
     public AtualizaUsuarioDto(AtualizaUsuarioDto atualizaUsuarioDto) {
-        this.id = id;
-        this.nome = nome;
-        this.email = email;
-        this.login = login;
-        this.senha = senha;
-        this.dataUltimaAtualizacao = dataUltimaAtualizacao;
-        this.endereco = endereco;
+        this.nome = atualizaUsuarioDto.nome;
+        this.email = atualizaUsuarioDto.email;
+        this.login = atualizaUsuarioDto.login;
+        this.senha = atualizaUsuarioDto.senha;
+        this.dataUltimaAtualizacao = atualizaUsuarioDto.dataUltimaAtualizacao;
+        this.endereco = atualizaUsuarioDto.endereco;
     }
 }

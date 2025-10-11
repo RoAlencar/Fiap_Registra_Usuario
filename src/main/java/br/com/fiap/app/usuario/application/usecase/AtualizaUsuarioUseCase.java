@@ -8,6 +8,9 @@ import br.com.fiap.app.usuario.domain.Usuario;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.ModificaUsuarioException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDateTime;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -25,15 +28,16 @@ public class AtualizaUsuarioUseCase implements AtualizaUsuarioUseCasePort {
         Usuario usuarioExistente = usuarioRepositoryPort.findByNome(dto.getNome())
                 .orElseThrow(UserNotFoundException::new);
 
-       try{
-           usuarioExistente.setNome(dto.getNome());
-           usuarioExistente.setEmail(dto.getEmail());
-           usuarioExistente.setEndereco(dto.getEndereco());
+        try {
+            usuarioExistente.setNome(dto.getNome());
+            usuarioExistente.setEmail(dto.getEmail());
+            usuarioExistente.setEndereco(dto.getEndereco());
+            usuarioExistente.setDataUltimaAtualizacao(LocalDateTime.now());
 
-           Usuario usuarioAtualizado = usuarioRepositoryPort.save(usuarioExistente);
-           return modelMapper.map(usuarioAtualizado, AtualizaUsuarioResponse.class);
-       } catch (Exception e){
-           throw new ModificaUsuarioException();
-       }
+            Usuario usuarioAtualizado = usuarioRepositoryPort.save(usuarioExistente);
+            return modelMapper.map(usuarioAtualizado, AtualizaUsuarioResponse.class);
+        } catch (Exception e) {
+            throw new ModificaUsuarioException();
+        }
     }
 }
