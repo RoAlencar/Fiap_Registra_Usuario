@@ -37,6 +37,7 @@ public class CriarUsuarioUseCase implements CriarUsuarioUseCasePort {
         endereco.setCep(dto.getEndereco().getCep());
 
         Usuario usuario = Usuario.builder()
+                .tipoUsuario(dto.getTipoUsuario())
                 .nome(dto.getNome())
                 .email(dto.getEmail())
                 .login(dto.getLogin())

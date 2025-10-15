@@ -1,6 +1,7 @@
 package br.com.fiap.app.usuario.application.dto.response;
 
 import br.com.fiap.app.usuario.domain.Endereco;
+import br.com.fiap.app.usuario.domain.enums.TipoUsuario;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 public class UsuarioBaseResponse {
 
     private Long id;
+    private TipoUsuario tipo;
     private String nome;
     private String email;
     private String login;
@@ -26,6 +28,7 @@ public class UsuarioBaseResponse {
 
     public UsuarioBaseResponse(UsuarioBaseResponse response) {
         this.id = response.getId();
+        this.tipo = response.getTipo();
         this.nome = response.getNome();
         this.email = response.getEmail();
         this.login = response.getLogin();
