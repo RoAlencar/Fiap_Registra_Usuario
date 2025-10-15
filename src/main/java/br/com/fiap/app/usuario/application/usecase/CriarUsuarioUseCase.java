@@ -11,6 +11,7 @@ import br.com.fiap.app.usuario.infrastructure.exception.custom.DuplicateEmailExc
 import br.com.fiap.app.usuario.infrastructure.exception.custom.EmailRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.NameRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordRequiredException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.TipoUsuarioRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.UserRequiredException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -25,7 +26,7 @@ public class CriarUsuarioUseCase implements CriarUsuarioUseCasePort {
 
     @Override
     public CriarUsuarioResponse criarUsuario(CriarUsuarioDto dto) throws AddressRequiredException, DuplicateEmailException, EmailRequiredException,
-            PasswordRequiredException, UserRequiredException, NameRequiredException {
+            PasswordRequiredException, UserRequiredException, NameRequiredException, TipoUsuarioRequiredException {
 
         validarUsuario(dto);
 
@@ -51,7 +52,7 @@ public class CriarUsuarioUseCase implements CriarUsuarioUseCasePort {
 
     private void validarUsuario(CriarUsuarioDto dto)
             throws AddressRequiredException, DuplicateEmailException, EmailRequiredException,
-            NameRequiredException, PasswordRequiredException, UserRequiredException {
+            NameRequiredException, PasswordRequiredException, UserRequiredException, TipoUsuarioRequiredException {
 
         if(dto == null){
             throw new UserRequiredException();
@@ -59,6 +60,10 @@ public class CriarUsuarioUseCase implements CriarUsuarioUseCasePort {
 
         if(dto.getNome() == null || dto.getNome().isEmpty()){
             throw new NameRequiredException();
+        }
+
+        if(dto.getTipoUsuario() == null){
+            throw new TipoUsuarioRequiredException();
         }
 
         if(dto.getEmail() == null || dto.getEmail().isEmpty()){

@@ -6,6 +6,7 @@ import br.com.fiap.app.usuario.infrastructure.exception.custom.EmailRequiredExce
 import br.com.fiap.app.usuario.infrastructure.exception.custom.ModificaUsuarioException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.NameRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordRequiredException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.TipoUsuarioRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.UserNotFoundException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.UserRequiredException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,6 +26,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ObjectNode> handleModificaUsuarioException(ModificaUsuarioException ex){
         log.error("[Usuario - Atualiza Usuario] Não foi possivel atualizar o usuário");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageConverter("Não foi possivel atualizar o usuário"));
+    }
+
+    @ExceptionHandler(TipoUsuarioRequiredException.class)
+    public ResponseEntity<ObjectNode> handleTipoUsuarioException(TipoUsuarioRequiredException ex){
+        log.error("[Usuario - Cadastra usuário] O Tipo de usuário é obrigatório.");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageConverter("O tipo de usuário é obrigatório"));
     }
 
     //TODO -> Validar se essa forma vai ser efetiva E/OU achar outra forma.

@@ -15,6 +15,7 @@ import br.com.fiap.app.usuario.infrastructure.exception.custom.EmailRequiredExce
 import br.com.fiap.app.usuario.infrastructure.exception.custom.ModificaUsuarioException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.NameRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordRequiredException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.TipoUsuarioRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.UserNotFoundException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.UserRequiredException;
 import jakarta.websocket.server.PathParam;
@@ -59,7 +60,7 @@ public class RegistroUsuarioController {
 
     @PostMapping
     public ResponseEntity<CriarUsuarioResponse> criarUsuario(@RequestBody CriarUsuarioDto dto) throws AddressRequiredException, DuplicateEmailException, EmailRequiredException,
-            NameRequiredException, PasswordRequiredException, UserRequiredException{
+            NameRequiredException, PasswordRequiredException, UserRequiredException, TipoUsuarioRequiredException {
         log.info("[Usuario - Criar Usuario] Iniciando processo.");
         return new ResponseEntity<>(criarUsuarioUseCasePort.criarUsuario(dto), HttpStatus.OK);
     }
