@@ -15,10 +15,10 @@ import br.com.fiap.app.usuario.infrastructure.exception.custom.EmailRequiredExce
 import br.com.fiap.app.usuario.infrastructure.exception.custom.ModificaUsuarioException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.NameRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordRequiredException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordUpdateNotAllowedException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.TipoUsuarioRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.UserNotFoundException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.UserRequiredException;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -52,24 +52,27 @@ public class RegistroUsuarioController {
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity<BuscaUsuarioResponse> buscaUsuarioPorNome(@PathVariable String name) throws UserNotFoundException {
+    public ResponseEntity<BuscaUsuarioResponse> buscaUsuarioPorNome(@PathVariable String name)
+            throws UserNotFoundException {
         log.info("[Usuario - Busca Por Nome] Iniciando processo.");
         BuscaUsuarioResponse buscaUsuarioREsponseDto = buscaUsuarioUseCasePort.buscaUsuarioPorNome(name);
-        return new ResponseEntity<>(buscaUsuarioREsponseDto,HttpStatus.OK);
+        return new ResponseEntity<>(buscaUsuarioREsponseDto, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<CriarUsuarioResponse> criarUsuario(@RequestBody CriarUsuarioDto dto) throws AddressRequiredException, DuplicateEmailException, EmailRequiredException,
+    public ResponseEntity<CriarUsuarioResponse> criarUsuario(@RequestBody CriarUsuarioDto dto)
+            throws AddressRequiredException, DuplicateEmailException, EmailRequiredException,
             NameRequiredException, PasswordRequiredException, UserRequiredException, TipoUsuarioRequiredException {
         log.info("[Usuario - Criar Usuario] Iniciando processo.");
         return new ResponseEntity<>(criarUsuarioUseCasePort.criarUsuario(dto), HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<AtualizaUsuarioResponse> atualizaUsuario(@RequestBody AtualizaUsuarioDto dto) throws UserNotFoundException, ModificaUsuarioException {
+    public ResponseEntity<AtualizaUsuarioResponse> atualizaUsuario(@RequestBody AtualizaUsuarioDto dto)
+            throws UserNotFoundException, ModificaUsuarioException, PasswordUpdateNotAllowedException {
         log.info("[Usuario - Atualiza Usuario] Iniciando processo.");
         AtualizaUsuarioResponse atualizaUsuarioResponse = atualizaUsuarioUseCasePort.atualizaUsuario(dto);
-        return new ResponseEntity<>(atualizaUsuarioResponse,HttpStatus.OK);
+        return new ResponseEntity<>(atualizaUsuarioResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

@@ -6,6 +6,7 @@ import br.com.fiap.app.usuario.application.port.AtualizaUsuarioUseCasePort;
 import br.com.fiap.app.usuario.application.port.UsuarioRepositoryPort;
 import br.com.fiap.app.usuario.domain.Usuario;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.ModificaUsuarioException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordUpdateNotAllowedException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -23,10 +24,14 @@ public class AtualizaUsuarioUseCase implements AtualizaUsuarioUseCasePort {
 
     @Override
     public AtualizaUsuarioResponse atualizaUsuario(AtualizaUsuarioDto dto)
-            throws ModificaUsuarioException, UserNotFoundException {
+            throws ModificaUsuarioException, UserNotFoundException, PasswordUpdateNotAllowedException {
 
         Usuario usuarioExistente = usuarioRepositoryPort.findByNome(dto.getNome())
                 .orElseThrow(UserNotFoundException::new);
+
+        if (dto.getSenha() != null && !usuarioExistente.getSenha().equals(dto.getSenha())) {
+            throw new PasswordUpdateNotAllowedException();
+        }
 
         try {
             usuarioExistente.setNome(dto.getNome());
