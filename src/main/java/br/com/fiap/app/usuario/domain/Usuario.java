@@ -1,6 +1,7 @@
 package br.com.fiap.app.usuario.domain;
 
 import br.com.fiap.app.usuario.adapter.out.jpa.usuario.entities.UsuarioEntity;
+import br.com.fiap.app.usuario.domain.enums.TipoUsuario;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 public class Usuario {
 
     private Long id;
+    private TipoUsuario tipoUsuario;
     private String nome;
     private String email;
     private String login;
@@ -27,6 +29,7 @@ public class Usuario {
     public UsuarioEntity toEntity() {
         return UsuarioEntity.builder()
                 .id(this.id)
+                .tipoUsuario(this.tipoUsuario)
                 .nome(this.nome)
                 .email(this.email)
                 .login(this.login)

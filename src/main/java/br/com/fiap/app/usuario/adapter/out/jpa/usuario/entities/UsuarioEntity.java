@@ -1,12 +1,19 @@
 package br.com.fiap.app.usuario.adapter.out.jpa.usuario.entities;
 
+import br.com.fiap.app.usuario.adapter.out.jpa.converter.TipoUsuarioConverter;
 import br.com.fiap.app.usuario.domain.Endereco;
 import br.com.fiap.app.usuario.domain.Usuario;
+import br.com.fiap.app.usuario.domain.enums.TipoUsuario;
+import jakarta.persistence.Access;
+import jakarta.persistence.AccessType;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,6 +37,11 @@ public class UsuarioEntity {
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Access(AccessType.FIELD)
+    @Column(name = "TIPO_USUARIO")
+    @Convert(converter = TipoUsuarioConverter.class)
+    private TipoUsuario tipoUsuario;
 
     @Column(name = "NOME")
     private String nome;
@@ -59,6 +71,7 @@ public class UsuarioEntity {
     public Usuario toDomain(){
         return Usuario.builder()
                 .id(this.id)
+                .tipoUsuario(this.tipoUsuario)
                 .nome(this.nome)
                 .email(this.email)
                 .login(this.login)
