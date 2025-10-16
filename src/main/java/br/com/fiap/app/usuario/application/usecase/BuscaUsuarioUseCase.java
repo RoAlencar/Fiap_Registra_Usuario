@@ -25,8 +25,16 @@ public class BuscaUsuarioUseCase implements BuscaUsuarioUseCasePort {
     }
 
     @Override
-    public BuscaUsuarioResponse buscaUsuarioPorNome(String nome) throws UserNotFoundException {
-        Usuario usuario = usuarioRepositoryPort.findByNome(nome).orElseThrow(UserNotFoundException::new);
-        return modelMapper.map(usuario, BuscaUsuarioResponse.class);
+    public List<BuscaUsuarioResponse> buscaUsuarioPorNome(String nome) throws UserNotFoundException {
+        List<Usuario> usuarios = usuarioRepositoryPort.findByNomeLikeIgnoreCaseAndAccent(nome);
+
+        if (usuarios.isEmpty()) {
+            throw new UserNotFoundException();
+        }
+
+        return usuarios.stream()
+                .map(usuario -> modelMapper.map(usuario, BuscaUsuarioResponse.class))
+                .toList();
     }
+
 }
