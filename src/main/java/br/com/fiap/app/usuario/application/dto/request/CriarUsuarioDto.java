@@ -1,6 +1,5 @@
 package br.com.fiap.app.usuario.application.dto.request;
 
-import br.com.fiap.app.usuario.adapter.out.jpa.usuario.entities.UsuarioEntity;
 import br.com.fiap.app.usuario.domain.Endereco;
 import br.com.fiap.app.usuario.domain.enums.TipoUsuario;
 import lombok.AllArgsConstructor;
@@ -18,7 +17,7 @@ import java.time.LocalDateTime;
 @Builder
 public class CriarUsuarioDto {
 
-    private TipoUsuario tipoUsuario;
+    private TipoUsuario tipo;
     private String nome;
     private String email;
     private String login;
@@ -27,7 +26,7 @@ public class CriarUsuarioDto {
     private Endereco endereco;
 
     public CriarUsuarioDto(CriarUsuarioDto criarUsuarioDto) {
-        this.tipoUsuario = criarUsuarioDto.tipoUsuario;
+        this.tipo = criarUsuarioDto.getTipo();
         this.nome = criarUsuarioDto.getNome();
         this.email = criarUsuarioDto.getEmail();
         this.login = criarUsuarioDto.getLogin();

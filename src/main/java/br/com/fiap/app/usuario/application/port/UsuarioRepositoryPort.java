@@ -8,9 +8,14 @@ import java.util.Optional;
 public interface UsuarioRepositoryPort {
 
     List<Usuario> findAll();
-    Optional<Usuario> findByNome(String name);
+
+    List<Usuario> findByNomeLikeIgnoreCaseAndAccent(String name);
+
     Optional<Usuario> findById(Long id);
+
     Optional<Usuario> findByEmail(String email);
+
     Usuario save(Usuario usuario);
+
     void deleteById(Long id);
 }

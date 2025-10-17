@@ -8,16 +8,16 @@ import jakarta.persistence.Converter;
 public class TipoUsuarioConverter implements AttributeConverter<TipoUsuario, String> {
 
     @Override
-    public String convertToDatabaseColumn(TipoUsuario tipoUsuario) {
-        return tipoUsuario == null ? null : tipoUsuario.name();
+    public String convertToDatabaseColumn(TipoUsuario tipo) {
+        return tipo == null ? null : tipo.name();
     }
 
     @Override
     public TipoUsuario convertToEntityAttribute(String dbData) {
-        System.out.println("Convertendo tipoUsuario do banco: " + dbData);
-        try{
+        System.out.println("Convertendo tipo do usuário do banco: " + dbData);
+        try {
             return dbData == null ? null : TipoUsuario.valueOf(dbData);
-        } catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return null;
         }
     }

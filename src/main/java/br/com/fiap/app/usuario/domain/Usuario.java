@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class Usuario {
 
     private Long id;
-    private TipoUsuario tipoUsuario;
+    private TipoUsuario tipo;
     private String nome;
     private String email;
     private String login;
@@ -29,7 +29,7 @@ public class Usuario {
     public UsuarioEntity toEntity() {
         return UsuarioEntity.builder()
                 .id(this.id)
-                .tipoUsuario(this.tipoUsuario)
+                .tipo(this.tipo)
                 .nome(this.nome)
                 .email(this.email)
                 .login(this.login)
