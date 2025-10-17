@@ -1,10 +1,13 @@
 package br.com.fiap.app.usuario.adapter.in.web;
 
+import br.com.fiap.app.usuario.application.dto.request.AtualizaSenhaDto;
 import br.com.fiap.app.usuario.application.dto.request.AtualizaUsuarioDto;
 import br.com.fiap.app.usuario.application.dto.request.CriarUsuarioDto;
+import br.com.fiap.app.usuario.application.dto.response.AtualizaSenhaResponse;
 import br.com.fiap.app.usuario.application.dto.response.AtualizaUsuarioResponse;
 import br.com.fiap.app.usuario.application.dto.response.BuscaUsuarioResponse;
 import br.com.fiap.app.usuario.application.dto.response.CriarUsuarioResponse;
+import br.com.fiap.app.usuario.application.port.AtualizaSenhaUseCasePort;
 import br.com.fiap.app.usuario.application.port.AtualizaUsuarioUseCasePort;
 import br.com.fiap.app.usuario.application.port.BuscaUsuarioUseCasePort;
 import br.com.fiap.app.usuario.application.port.CriarUsuarioUseCasePort;
@@ -14,6 +17,7 @@ import br.com.fiap.app.usuario.infrastructure.exception.custom.DuplicateEmailExc
 import br.com.fiap.app.usuario.infrastructure.exception.custom.EmailRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.ModificaUsuarioException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.NameRequiredException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordNotValidException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordUpdateNotAllowedException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.TipoUsuarioRequiredException;
@@ -36,11 +40,12 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("api/v1/usuario")
+@RequestMapping("api/v1/usuarios")
 @RequiredArgsConstructor
 public class RegistroUsuarioController {
 
     private final AtualizaUsuarioUseCasePort atualizaUsuarioUseCasePort;
+    private final AtualizaSenhaUseCasePort atualizaSenhaUseCasePort;
     private final BuscaUsuarioUseCasePort buscaUsuarioUseCasePort;
     private final CriarUsuarioUseCasePort criarUsuarioUseCasePort;
     private final DeletaUsuarioUseCasePort deletaUsuarioUseCasePort;
@@ -64,7 +69,7 @@ public class RegistroUsuarioController {
             throws AddressRequiredException, DuplicateEmailException, EmailRequiredException,
             NameRequiredException, PasswordRequiredException, UserRequiredException, TipoUsuarioRequiredException {
         log.info("[Usuario - Criar Usuario] Iniciando processo.");
-        return new ResponseEntity<>(criarUsuarioUseCasePort.criarUsuario(dto), HttpStatus.OK);
+        return new ResponseEntity<>(criarUsuarioUseCasePort.criarUsuario(dto), HttpStatus.CREATED);
     }
 
     @PutMapping
@@ -73,6 +78,14 @@ public class RegistroUsuarioController {
         log.info("[Usuario - Atualiza Usuario] Iniciando processo.");
         AtualizaUsuarioResponse atualizaUsuarioResponse = atualizaUsuarioUseCasePort.atualizaUsuario(dto);
         return new ResponseEntity<>(atualizaUsuarioResponse, HttpStatus.OK);
+    }
+
+    @PutMapping("/senha")
+    public ResponseEntity<AtualizaSenhaResponse> atualizaSenha(@RequestBody AtualizaSenhaDto dto)
+            throws UserNotFoundException, PasswordNotValidException {
+        log.info("[Usuario - Atualiza Senha] Iniciando processo.");
+        AtualizaSenhaResponse atualizaSenhaResponse = atualizaSenhaUseCasePort.atualizaSenha(dto);
+        return new ResponseEntity<>(atualizaSenhaResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
