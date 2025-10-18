@@ -46,5 +46,6 @@ public class UsuarioJpaRepositoryPortAdapter implements UsuarioRepositoryPort {
 
     @Override
     public void deleteById(Long id) {
+        usuarioJpaRepository.deleteById(id);
     }
 }

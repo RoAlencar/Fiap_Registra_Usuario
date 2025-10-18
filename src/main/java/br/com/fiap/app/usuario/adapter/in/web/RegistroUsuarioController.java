@@ -79,6 +79,6 @@ public class RegistroUsuarioController {
     public ResponseEntity<Void> deletaUsuario(@PathVariable Long id) throws UserNotFoundException {
         log.info("[Usuario - Deleta Usuario] Iniciando processo.");
         deletaUsuarioUseCasePort.deletaUsuario(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
