@@ -26,7 +26,7 @@ public class AtualizaUsuarioUseCase implements AtualizaUsuarioUseCasePort {
     public AtualizaUsuarioResponse atualizaUsuario(AtualizaUsuarioDto dto)
             throws ModificaUsuarioException, UserNotFoundException, PasswordUpdateNotAllowedException {
 
-        Usuario usuarioExistente = usuarioRepositoryPort.findByNome(dto.getNome())
+        Usuario usuarioExistente = usuarioRepositoryPort.findById(dto.getId())
                 .orElseThrow(UserNotFoundException::new);
 
         if (dto.getSenha() != null && !usuarioExistente.getSenha().equals(dto.getSenha())) {

@@ -9,5 +9,5 @@ public interface BuscaUsuarioUseCasePort {
 
     List<BuscaUsuarioResponse> buscaTodosUsuarios();
 
-    BuscaUsuarioResponse buscaUsuarioPorNome(String nome) throws UserNotFoundException;
+    List<BuscaUsuarioResponse> buscaUsuarioPorNome(String nome) throws UserNotFoundException;
 }

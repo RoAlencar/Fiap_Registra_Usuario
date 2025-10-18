@@ -52,10 +52,10 @@ public class RegistroUsuarioController {
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity<BuscaUsuarioResponse> buscaUsuarioPorNome(@PathVariable String name)
+    public ResponseEntity<List<BuscaUsuarioResponse>> buscaUsuarioPorNome(@PathVariable String name)
             throws UserNotFoundException {
         log.info("[Usuario - Busca Por Nome] Iniciando processo.");
-        BuscaUsuarioResponse buscaUsuarioREsponseDto = buscaUsuarioUseCasePort.buscaUsuarioPorNome(name);
+        List<BuscaUsuarioResponse> buscaUsuarioREsponseDto = buscaUsuarioUseCasePort.buscaUsuarioPorNome(name);
         return new ResponseEntity<>(buscaUsuarioREsponseDto, HttpStatus.OK);
     }
 
