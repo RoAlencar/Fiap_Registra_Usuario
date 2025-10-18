@@ -39,9 +39,9 @@ public class UsuarioEntity {
     private Long id;
 
     @Access(AccessType.FIELD)
-    @Column(name = "TIPO_USUARIO")
+    @Column(name = "TIPO")
     @Convert(converter = TipoUsuarioConverter.class)
-    private TipoUsuario tipoUsuario;
+    private TipoUsuario tipo;
 
     @Column(name = "NOME")
     private String nome;
@@ -71,7 +71,7 @@ public class UsuarioEntity {
     public Usuario toDomain(){
         return Usuario.builder()
                 .id(this.id)
-                .tipoUsuario(this.tipoUsuario)
+                .tipo(this.tipo)
                 .nome(this.nome)
                 .email(this.email)
                 .login(this.login)

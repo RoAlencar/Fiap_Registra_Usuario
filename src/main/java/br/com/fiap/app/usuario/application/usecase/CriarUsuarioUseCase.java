@@ -25,7 +25,8 @@ public class CriarUsuarioUseCase implements CriarUsuarioUseCasePort {
     private final ModelMapper modelMapper;
 
     @Override
-    public CriarUsuarioResponse criarUsuario(CriarUsuarioDto dto) throws AddressRequiredException, DuplicateEmailException, EmailRequiredException,
+    public CriarUsuarioResponse criarUsuario(CriarUsuarioDto dto)
+            throws AddressRequiredException, DuplicateEmailException, EmailRequiredException,
             PasswordRequiredException, UserRequiredException, NameRequiredException, TipoUsuarioRequiredException {
 
         validarUsuario(dto);
@@ -38,7 +39,7 @@ public class CriarUsuarioUseCase implements CriarUsuarioUseCasePort {
         endereco.setCep(dto.getEndereco().getCep());
 
         Usuario usuario = Usuario.builder()
-                .tipoUsuario(dto.getTipoUsuario())
+                .tipo(dto.getTipo())
                 .nome(dto.getNome())
                 .email(dto.getEmail())
                 .login(dto.getLogin())
@@ -54,31 +55,31 @@ public class CriarUsuarioUseCase implements CriarUsuarioUseCasePort {
             throws AddressRequiredException, DuplicateEmailException, EmailRequiredException,
             NameRequiredException, PasswordRequiredException, UserRequiredException, TipoUsuarioRequiredException {
 
-        if(dto == null){
+        if (dto == null) {
             throw new UserRequiredException();
         }
 
-        if(dto.getNome() == null || dto.getNome().isEmpty()){
+        if (dto.getNome() == null || dto.getNome().isEmpty()) {
             throw new NameRequiredException();
         }
 
-        if(dto.getTipoUsuario() == null){
+        if (dto.getTipo() == null) {
             throw new TipoUsuarioRequiredException();
         }
 
-        if(dto.getEmail() == null || dto.getEmail().isEmpty()){
+        if (dto.getEmail() == null || dto.getEmail().isEmpty()) {
             throw new EmailRequiredException();
         }
 
-        if(usuarioRepositoryPort.findByEmail(dto.getEmail()).isPresent()){
+        if (usuarioRepositoryPort.findByEmail(dto.getEmail()).isPresent()) {
             throw new DuplicateEmailException();
         }
 
-        if(dto.getSenha() == null || dto.getSenha().isEmpty()){
+        if (dto.getSenha() == null || dto.getSenha().isEmpty()) {
             throw new PasswordRequiredException();
         }
 
-        if (dto.getEndereco() == null){
+        if (dto.getEndereco() == null) {
             throw new AddressRequiredException();
         }
     }
