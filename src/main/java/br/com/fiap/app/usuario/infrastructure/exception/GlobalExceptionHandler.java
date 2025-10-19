@@ -184,7 +184,6 @@ public class GlobalExceptionHandler {
                         "Erro ao processar a requisição. Verifique o corpo do JSON enviado.", request));
     }
 
-
     private ProblemDetail buildProblemDetail(HttpStatus status, String detail, HttpServletRequest request) {
                 ProblemDetail problem = ProblemDetail.forStatus(status);
                 problem.setTitle(status.getReasonPhrase());
