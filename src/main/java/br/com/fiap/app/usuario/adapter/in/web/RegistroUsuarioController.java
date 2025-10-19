@@ -17,6 +17,10 @@ import br.com.fiap.app.usuario.infrastructure.exception.custom.DuplicateEmailExc
 import br.com.fiap.app.usuario.infrastructure.exception.custom.EmailRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.ModificaUsuarioException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.NameRequiredException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.NewPasswordEqualsOldPasswordException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.NewPasswordRequiredException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.OldPasswordInvalidException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.OldPasswordRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordNotValidException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordUpdateNotAllowedException;
@@ -82,7 +86,7 @@ public class RegistroUsuarioController {
 
     @PutMapping("/senha")
     public ResponseEntity<AtualizaSenhaResponse> atualizaSenha(@RequestBody AtualizaSenhaDto dto)
-            throws UserNotFoundException, PasswordNotValidException {
+            throws UserNotFoundException, PasswordNotValidException, NewPasswordEqualsOldPasswordException, OldPasswordRequiredException, OldPasswordInvalidException, NewPasswordRequiredException {
         log.info("[Usuario - Atualiza Senha] Iniciando processo.");
         AtualizaSenhaResponse atualizaSenhaResponse = atualizaSenhaUseCasePort.atualizaSenha(dto);
         return new ResponseEntity<>(atualizaSenhaResponse, HttpStatus.OK);
