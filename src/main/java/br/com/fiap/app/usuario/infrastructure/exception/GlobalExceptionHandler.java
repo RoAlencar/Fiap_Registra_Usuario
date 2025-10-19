@@ -5,21 +5,29 @@ import br.com.fiap.app.usuario.infrastructure.exception.custom.DuplicateEmailExc
 import br.com.fiap.app.usuario.infrastructure.exception.custom.EmailRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.ModificaUsuarioException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.NameRequiredException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.NewPasswordEqualsOldPasswordException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.NewPasswordRequiredException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.OldPasswordInvalidException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.OldPasswordRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordNotValidException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordUpdateNotAllowedException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.TipoUsuarioRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.UserNotFoundException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.UserRequiredException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.net.URI;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Slf4j
 @ControllerAdvice
@@ -89,6 +97,34 @@ public class GlobalExceptionHandler {
                                                 request));
         }
 
+        @ExceptionHandler(OldPasswordRequiredException.class)
+            public ResponseEntity<ProblemDetail> handleOldPasswordRequiredException(OldPasswordRequiredException ex, HttpServletRequest request) {
+            log.warn("[Usuario - Atualizar senha] O campo 'senha antiga' é obrigatório");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(buildProblemDetail(HttpStatus.BAD_REQUEST, "O campo senha antiga é obrigatório", request));
+        }
+
+        @ExceptionHandler(OldPasswordInvalidException.class)
+        public ResponseEntity<ProblemDetail> handleOldPasswordInvalidException(OldPasswordInvalidException ex, HttpServletRequest request) {
+            log.warn("[Usuario - Atualizar senha] A senha antiga informada é inválida");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(buildProblemDetail(HttpStatus.BAD_REQUEST, "A senha antiga informada é inválida", request));
+        }
+
+        @ExceptionHandler(NewPasswordRequiredException.class)
+        public ResponseEntity<ProblemDetail> handleNewPasswordRequiredException(NewPasswordRequiredException ex, HttpServletRequest request) {
+            log.warn("[Usuario - Atualizar senha] O campo 'nova senha' é obrigatório");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(buildProblemDetail(HttpStatus.BAD_REQUEST, "O campo 'nova senha' é obrigatório", request));
+        }
+
+        @ExceptionHandler(NewPasswordEqualsOldPasswordException.class)
+        public ResponseEntity<ProblemDetail> handleNewPasswordEqualsOldPasswordException(NewPasswordEqualsOldPasswordException ex,HttpServletRequest request){
+            log.warn("[Usuario - Atualizar senha] A nova senha não pode ser igual à senha atual");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(buildProblemDetail(HttpStatus.BAD_REQUEST, "A nova senha não pode ser igual à senha atual", request));
+        }
+
         @ExceptionHandler(PasswordRequiredException.class)
         public ResponseEntity<ProblemDetail> handlePasswordRequiredException(PasswordRequiredException ex,
                         HttpServletRequest request) {
@@ -123,7 +159,33 @@ public class GlobalExceptionHandler {
                                 .body(buildProblemDetail(HttpStatus.BAD_REQUEST, "O usuário é obrigatório", request));
         }
 
-        private ProblemDetail buildProblemDetail(HttpStatus status, String detail, HttpServletRequest request) {
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ProblemDetail> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+                                                                      HttpServletRequest request) {
+
+        if (ex.getCause() instanceof InvalidFormatException cause && cause.getTargetType().isEnum()) {
+            String field = cause.getPath().isEmpty() ? "valor desconhecido" : cause.getPath().get(0).getFieldName();
+            String acceptedValues = Arrays.stream(cause.getTargetType().getEnumConstants())
+                    .map(Object::toString)
+                    .collect(Collectors.joining(", "));
+
+            String detail = String.format(
+                    "O campo '%s' recebeu um valor inválido. Valores aceitos: %s",
+                    field, acceptedValues);
+
+            log.warn("[Enum inválido] {} - {}", field, detail);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(buildProblemDetail(HttpStatus.BAD_REQUEST, detail, request));
+        }
+
+        log.error("[Erro de leitura JSON] {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(buildProblemDetail(HttpStatus.BAD_REQUEST,
+                        "Erro ao processar a requisição. Verifique o corpo do JSON enviado.", request));
+    }
+
+
+    private ProblemDetail buildProblemDetail(HttpStatus status, String detail, HttpServletRequest request) {
                 ProblemDetail problem = ProblemDetail.forStatus(status);
                 problem.setTitle(status.getReasonPhrase());
                 problem.setDetail(detail);
