@@ -1,6 +1,7 @@
 package br.com.fiap.app.usuario.application.dto.request;
 
 import br.com.fiap.app.usuario.domain.Endereco;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,11 +18,18 @@ import java.time.LocalDateTime;
 public class AtualizaUsuarioDto {
 
     private Long id;
+
     private String nome;
+
     private String email;
+
     private String login;
+
+    @Schema(hidden = true)
     private String senha;
+
     private LocalDateTime dataUltimaAtualizacao;
+
     private Endereco endereco;
 
     public AtualizaUsuarioDto(AtualizaUsuarioDto atualizaUsuarioDto) {
