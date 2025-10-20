@@ -3,10 +3,12 @@ package br.com.fiap.app.usuario.infrastructure.exception;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.AddressRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.DuplicateEmailException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.EmailRequiredException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.LoginRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.ModificaUsuarioException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.NameRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.NewPasswordEqualsOldPasswordException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.NewPasswordRequiredException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.NoChangesDetectedException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.OldPasswordInvalidException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.OldPasswordRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordNotValidException;
@@ -39,6 +41,16 @@ public class GlobalExceptionHandler {
                 log.error("[Usuario - Atualiza Usuario] Não foi possivel atualizar o usuário");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                                 .body(buildProblemDetail(HttpStatus.BAD_REQUEST, "Não foi possivel atualizar o usuário",
+                                                request));
+        }
+
+        @ExceptionHandler(NoChangesDetectedException.class)
+        public ResponseEntity<ProblemDetail> handleNoChangesDetectedException(NoChangesDetectedException ex,
+                        HttpServletRequest request) {
+                log.error("[Usuario - Atualiza Usuario] Não foram detectadas alterações nos dados do usuário");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body(buildProblemDetail(HttpStatus.BAD_REQUEST,
+                                                "Não foram detectadas alterações nos dados do usuário",
                                                 request));
         }
 
@@ -97,32 +109,48 @@ public class GlobalExceptionHandler {
                                                 request));
         }
 
+        @ExceptionHandler(LoginRequiredException.class)
+        public ResponseEntity<ProblemDetail> handleLoginRequiredException(LoginRequiredException ex,
+                        HttpServletRequest request) {
+                log.warn("[Usuario - Cadastra usuário] O login do usuário é obrigatório");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildProblemDetail(HttpStatus.BAD_REQUEST,
+                                "O login do usuário é obrigatório", request));
+        }
+
         @ExceptionHandler(OldPasswordRequiredException.class)
-            public ResponseEntity<ProblemDetail> handleOldPasswordRequiredException(OldPasswordRequiredException ex, HttpServletRequest request) {
-            log.warn("[Usuario - Atualizar senha] O campo 'senha antiga' é obrigatório");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(buildProblemDetail(HttpStatus.BAD_REQUEST, "O campo senha antiga é obrigatório", request));
+        public ResponseEntity<ProblemDetail> handleOldPasswordRequiredException(OldPasswordRequiredException ex,
+                        HttpServletRequest request) {
+                log.warn("[Usuario - Atualizar senha] O campo 'senha' é obrigatório");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body(buildProblemDetail(HttpStatus.BAD_REQUEST, "O campo senha é obrigatório",
+                                                request));
         }
 
         @ExceptionHandler(OldPasswordInvalidException.class)
-        public ResponseEntity<ProblemDetail> handleOldPasswordInvalidException(OldPasswordInvalidException ex, HttpServletRequest request) {
-            log.warn("[Usuario - Atualizar senha] A senha antiga informada é inválida");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(buildProblemDetail(HttpStatus.BAD_REQUEST, "A senha antiga informada é inválida", request));
+        public ResponseEntity<ProblemDetail> handleOldPasswordInvalidException(OldPasswordInvalidException ex,
+                        HttpServletRequest request) {
+                log.warn("[Usuario - Atualizar senha] A senha informada é inválida");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body(buildProblemDetail(HttpStatus.BAD_REQUEST, "A senha informada é inválida",
+                                                request));
         }
 
         @ExceptionHandler(NewPasswordRequiredException.class)
-        public ResponseEntity<ProblemDetail> handleNewPasswordRequiredException(NewPasswordRequiredException ex, HttpServletRequest request) {
-            log.warn("[Usuario - Atualizar senha] O campo 'nova senha' é obrigatório");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(buildProblemDetail(HttpStatus.BAD_REQUEST, "O campo 'nova senha' é obrigatório", request));
+        public ResponseEntity<ProblemDetail> handleNewPasswordRequiredException(NewPasswordRequiredException ex,
+                        HttpServletRequest request) {
+                log.warn("[Usuario - Atualizar senha] O campo 'nova senha' é obrigatório");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body(buildProblemDetail(HttpStatus.BAD_REQUEST, "O campo 'nova senha' é obrigatório",
+                                                request));
         }
 
         @ExceptionHandler(NewPasswordEqualsOldPasswordException.class)
-        public ResponseEntity<ProblemDetail> handleNewPasswordEqualsOldPasswordException(NewPasswordEqualsOldPasswordException ex,HttpServletRequest request){
-            log.warn("[Usuario - Atualizar senha] A nova senha não pode ser igual à senha atual");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(buildProblemDetail(HttpStatus.BAD_REQUEST, "A nova senha não pode ser igual à senha atual", request));
+        public ResponseEntity<ProblemDetail> handleNewPasswordEqualsOldPasswordException(
+                        NewPasswordEqualsOldPasswordException ex, HttpServletRequest request) {
+                log.warn("[Usuario - Atualizar senha] A nova senha não pode ser igual à senha atual");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body(buildProblemDetail(HttpStatus.BAD_REQUEST,
+                                                "A nova senha não pode ser igual à senha atual", request));
         }
 
         @ExceptionHandler(PasswordRequiredException.class)
@@ -159,32 +187,34 @@ public class GlobalExceptionHandler {
                                 .body(buildProblemDetail(HttpStatus.BAD_REQUEST, "O usuário é obrigatório", request));
         }
 
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ProblemDetail> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-                                                                      HttpServletRequest request) {
+        @ExceptionHandler(HttpMessageNotReadableException.class)
+        public ResponseEntity<ProblemDetail> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+                        HttpServletRequest request) {
 
-        if (ex.getCause() instanceof InvalidFormatException cause && cause.getTargetType().isEnum()) {
-            String field = cause.getPath().isEmpty() ? "valor desconhecido" : cause.getPath().get(0).getFieldName();
-            String acceptedValues = Arrays.stream(cause.getTargetType().getEnumConstants())
-                    .map(Object::toString)
-                    .collect(Collectors.joining(", "));
+                if (ex.getCause() instanceof InvalidFormatException cause && cause.getTargetType().isEnum()) {
+                        String field = cause.getPath().isEmpty() ? "valor desconhecido"
+                                        : cause.getPath().get(0).getFieldName();
+                        String acceptedValues = Arrays.stream(cause.getTargetType().getEnumConstants())
+                                        .map(Object::toString)
+                                        .collect(Collectors.joining(", "));
 
-            String detail = String.format(
-                    "O campo '%s' recebeu um valor inválido. Valores aceitos: %s",
-                    field, acceptedValues);
+                        String detail = String.format(
+                                        "O campo '%s' recebeu um valor inválido. Valores aceitos: %s",
+                                        field, acceptedValues);
 
-            log.warn("[Enum inválido] {} - {}", field, detail);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(buildProblemDetail(HttpStatus.BAD_REQUEST, detail, request));
+                        log.warn("[Enum inválido] {} - {}", field, detail);
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                        .body(buildProblemDetail(HttpStatus.BAD_REQUEST, detail, request));
+                }
+
+                log.error("[Erro de leitura JSON] {}", ex.getMessage());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body(buildProblemDetail(HttpStatus.BAD_REQUEST,
+                                                "Erro ao processar a requisição. Verifique o corpo do JSON enviado.",
+                                                request));
         }
 
-        log.error("[Erro de leitura JSON] {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(buildProblemDetail(HttpStatus.BAD_REQUEST,
-                        "Erro ao processar a requisição. Verifique o corpo do JSON enviado.", request));
-    }
-
-    private ProblemDetail buildProblemDetail(HttpStatus status, String detail, HttpServletRequest request) {
+        private ProblemDetail buildProblemDetail(HttpStatus status, String detail, HttpServletRequest request) {
                 ProblemDetail problem = ProblemDetail.forStatus(status);
                 problem.setTitle(status.getReasonPhrase());
                 problem.setDetail(detail);
