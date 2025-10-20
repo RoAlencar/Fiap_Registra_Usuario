@@ -5,6 +5,7 @@ import br.com.fiap.app.usuario.application.dto.response.CriarUsuarioResponse;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.AddressRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.DuplicateEmailException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.EmailRequiredException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.LoginRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.NameRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.TipoUsuarioRequiredException;
@@ -12,5 +13,7 @@ import br.com.fiap.app.usuario.infrastructure.exception.custom.UserRequiredExcep
 
 public interface CriarUsuarioUseCasePort {
 
-    CriarUsuarioResponse criarUsuario(CriarUsuarioDto dto) throws AddressRequiredException, DuplicateEmailException, EmailRequiredException, PasswordRequiredException, UserRequiredException, NameRequiredException, TipoUsuarioRequiredException;
+    CriarUsuarioResponse criarUsuario(CriarUsuarioDto dto) throws AddressRequiredException,
+            DuplicateEmailException, EmailRequiredException, LoginRequiredException, PasswordRequiredException,
+            UserRequiredException, NameRequiredException, TipoUsuarioRequiredException;
 }
