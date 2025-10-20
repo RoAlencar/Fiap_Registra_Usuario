@@ -8,6 +8,7 @@ import br.com.fiap.app.usuario.infrastructure.exception.custom.ModificaUsuarioEx
 import br.com.fiap.app.usuario.infrastructure.exception.custom.NameRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.NewPasswordEqualsOldPasswordException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.NewPasswordRequiredException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.NoChangesDetectedException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.OldPasswordInvalidException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.OldPasswordRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordNotValidException;
@@ -40,6 +41,16 @@ public class GlobalExceptionHandler {
                 log.error("[Usuario - Atualiza Usuario] Não foi possivel atualizar o usuário");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                                 .body(buildProblemDetail(HttpStatus.BAD_REQUEST, "Não foi possivel atualizar o usuário",
+                                                request));
+        }
+
+        @ExceptionHandler(NoChangesDetectedException.class)
+        public ResponseEntity<ProblemDetail> handleNoChangesDetectedException(NoChangesDetectedException ex,
+                        HttpServletRequest request) {
+                log.error("[Usuario - Atualiza Usuario] Não foram detectadas alterações nos dados do usuário");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body(buildProblemDetail(HttpStatus.BAD_REQUEST,
+                                                "Não foram detectadas alterações nos dados do usuário",
                                                 request));
         }
 
