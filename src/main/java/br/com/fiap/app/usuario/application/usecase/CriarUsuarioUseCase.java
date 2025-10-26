@@ -9,6 +9,7 @@ import br.com.fiap.app.usuario.domain.Usuario;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.AddressRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.DuplicateEmailException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.EmailRequiredException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.LoginRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.NameRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.TipoUsuarioRequiredException;
@@ -26,7 +27,7 @@ public class CriarUsuarioUseCase implements CriarUsuarioUseCasePort {
 
     @Override
     public CriarUsuarioResponse criarUsuario(CriarUsuarioDto dto)
-            throws AddressRequiredException, DuplicateEmailException, EmailRequiredException,
+            throws AddressRequiredException, DuplicateEmailException, EmailRequiredException, LoginRequiredException,
             PasswordRequiredException, UserRequiredException, NameRequiredException, TipoUsuarioRequiredException {
 
         validarUsuario(dto);
@@ -52,23 +53,27 @@ public class CriarUsuarioUseCase implements CriarUsuarioUseCasePort {
     }
 
     private void validarUsuario(CriarUsuarioDto dto)
-            throws AddressRequiredException, DuplicateEmailException, EmailRequiredException,
+            throws AddressRequiredException, DuplicateEmailException, EmailRequiredException, LoginRequiredException,
             NameRequiredException, PasswordRequiredException, UserRequiredException, TipoUsuarioRequiredException {
 
         if (dto == null) {
             throw new UserRequiredException();
         }
 
-        if (dto.getNome() == null || dto.getNome().isEmpty()) {
-            throw new NameRequiredException();
-        }
-
         if (dto.getTipo() == null) {
             throw new TipoUsuarioRequiredException();
         }
 
+        if (dto.getNome() == null || dto.getNome().isEmpty()) {
+            throw new NameRequiredException();
+        }
+
         if (dto.getEmail() == null || dto.getEmail().isEmpty()) {
             throw new EmailRequiredException();
+        }
+
+        if (dto.getLogin() == null || dto.getLogin().isEmpty()) {
+            throw new LoginRequiredException();
         }
 
         if (usuarioRepositoryPort.findByEmail(dto.getEmail()).isPresent()) {
