@@ -20,6 +20,7 @@ import br.com.fiap.app.usuario.infrastructure.exception.custom.ModificaUsuarioEx
 import br.com.fiap.app.usuario.infrastructure.exception.custom.NameRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.NewPasswordEqualsOldPasswordException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.NewPasswordRequiredException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.NoChangesDetectedException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.OldPasswordInvalidException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.OldPasswordRequiredException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordNotValidException;
@@ -79,7 +80,8 @@ public class RegistroUsuarioController {
 
     @PutMapping
     public ResponseEntity<AtualizaUsuarioResponse> atualizaUsuario(@RequestBody AtualizaUsuarioDto dto)
-            throws UserNotFoundException, ModificaUsuarioException, PasswordUpdateNotAllowedException {
+            throws UserNotFoundException, ModificaUsuarioException, NoChangesDetectedException,
+            PasswordUpdateNotAllowedException {
         log.info("[Usuario - Atualiza Usuario] Iniciando processo.");
         AtualizaUsuarioResponse atualizaUsuarioResponse = atualizaUsuarioUseCasePort.atualizaUsuario(dto);
         return new ResponseEntity<>(atualizaUsuarioResponse, HttpStatus.OK);
