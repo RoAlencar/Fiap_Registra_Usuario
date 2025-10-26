@@ -26,6 +26,9 @@ public class Usuario {
     private LocalDateTime dataUltimaAtualizacao;
     private Endereco endereco;
 
+    public Usuario(Usuario usuario) {
+    }
+
     public UsuarioEntity toEntity() {
         return UsuarioEntity.builder()
                 .id(this.id)

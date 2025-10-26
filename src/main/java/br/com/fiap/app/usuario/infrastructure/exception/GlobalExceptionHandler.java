@@ -70,7 +70,7 @@ public class GlobalExceptionHandler {
                 String httpMethod = request.getMethod();
                 log.error("[Usuario - {}] O usuario não encontrado.", httpMethod);
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                                .body(buildProblemDetail(HttpStatus.NOT_FOUND, "O usuario não foi encontrado.",
+                                .body(buildProblemDetail(HttpStatus.NOT_FOUND, "O usuario não foi encontrado",
                                                 request));
         }
 
@@ -163,7 +163,7 @@ public class GlobalExceptionHandler {
         }
 
         @ExceptionHandler(PasswordUpdateNotAllowedException.class)
-        public ResponseEntity<ProblemDetail> handlePasswordUpdateNotAllowedExecption(
+        public ResponseEntity<ProblemDetail> handlePasswordUpdateNotAllowedException(
                         PasswordUpdateNotAllowedException ex,
                         HttpServletRequest request) {
                 log.warn("[Usuario - Atualiza usuário] A senha do usuário só é modificada por endpoint próprio");
@@ -172,8 +172,8 @@ public class GlobalExceptionHandler {
         }
 
         @ExceptionHandler(PasswordNotValidException.class)
-        public ResponseEntity<ProblemDetail> handlePasswordNotValidExecption(PasswordNotValidException ex,
-                        HttpServletRequest request) {
+        public ResponseEntity<ProblemDetail> handlePasswordNotValidException(PasswordNotValidException ex,
+                                                                             HttpServletRequest request) {
                 log.warn("[Usuario - Atualiza senha] A senha informada é inválida");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildProblemDetail(HttpStatus.BAD_REQUEST,
                                 "A senha do usuário é inválida", request));
