@@ -6,11 +6,13 @@ import br.com.fiap.app.usuario.application.port.AtualizaUsuarioUseCasePort;
 import br.com.fiap.app.usuario.application.port.UsuarioRepositoryPort;
 import br.com.fiap.app.usuario.domain.Usuario;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.ModificaUsuarioException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.NoChangesDetectedException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.PasswordUpdateNotAllowedException;
 import br.com.fiap.app.usuario.infrastructure.exception.custom.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -24,10 +26,15 @@ public class AtualizaUsuarioUseCase implements AtualizaUsuarioUseCasePort {
 
     @Override
     public AtualizaUsuarioResponse atualizaUsuario(AtualizaUsuarioDto dto)
-            throws ModificaUsuarioException, UserNotFoundException, PasswordUpdateNotAllowedException {
+            throws ModificaUsuarioException, UserNotFoundException, PasswordUpdateNotAllowedException,
+            NoChangesDetectedException {
 
         Usuario usuarioExistente = usuarioRepositoryPort.findById(dto.getId())
                 .orElseThrow(UserNotFoundException::new);
+
+        if (isUnchanged(dto, usuarioExistente)) {
+            throw new NoChangesDetectedException();
+        }
 
         if (dto.getSenha() != null && !usuarioExistente.getSenha().equals(dto.getSenha())) {
             throw new PasswordUpdateNotAllowedException();
@@ -36,6 +43,7 @@ public class AtualizaUsuarioUseCase implements AtualizaUsuarioUseCasePort {
         try {
             usuarioExistente.setNome(dto.getNome());
             usuarioExistente.setEmail(dto.getEmail());
+            usuarioExistente.setLogin(dto.getLogin());
             usuarioExistente.setEndereco(dto.getEndereco());
             usuarioExistente.setDataUltimaAtualizacao(LocalDateTime.now());
 
@@ -44,5 +52,12 @@ public class AtualizaUsuarioUseCase implements AtualizaUsuarioUseCasePort {
         } catch (Exception e) {
             throw new ModificaUsuarioException();
         }
+    }
+
+    private boolean isUnchanged(AtualizaUsuarioDto dto, Usuario usuario) {
+        return Objects.equals(dto.getNome(), usuario.getNome()) &&
+                Objects.equals(dto.getEmail(), usuario.getEmail()) &&
+                Objects.equals(dto.getLogin(), usuario.getLogin()) &&
+                Objects.equals(dto.getEndereco(), usuario.getEndereco());
     }
 }
