@@ -24,6 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class CriarUsuarioUseCaseTest {
@@ -107,20 +109,26 @@ public class CriarUsuarioUseCaseTest {
     void deveLancarDuplicateEmailExceptionQuandoEmailJaExiste() {
         CriarUsuarioDto dto = new CriarUsuarioDto();
         dto.setNome("João");
+        dto.setLogin("joao123");
         dto.setTipo(TipoUsuario.USUARIO);
         dto.setEmail("email@email.com");
         dto.setSenha("senha");
         dto.setEndereco(new Endereco());
 
-        when(usuarioRepositoryPort.findByEmail(dto.getEmail())).thenReturn(Optional.of(new Usuario()));
+        when(usuarioRepositoryPort.findByEmail("email@email.com"))
+                .thenReturn(Optional.of(new Usuario()));
 
-        assertThrows(DuplicateEmailException.class, () -> criarUsuarioUseCase.criarUsuario(dto));
+        assertThrows(DuplicateEmailException.class,
+                () -> criarUsuarioUseCase.criarUsuario(dto));
+
+        verify(usuarioRepositoryPort, never()).save(any(Usuario.class));
     }
 
     @Test
     void deveLancarPasswordRequiredExceptionQuandoSenhaNula() {
         CriarUsuarioDto dto = new CriarUsuarioDto();
         dto.setNome("João");
+        dto.setLogin("login");
         dto.setTipo(TipoUsuario.USUARIO);
         dto.setEmail("email@email.com");
         dto.setEndereco(new Endereco());
@@ -131,6 +139,7 @@ public class CriarUsuarioUseCaseTest {
     void deveLancarAddressRequiredExceptionQuandoEnderecoNulo() {
         CriarUsuarioDto dto = new CriarUsuarioDto();
         dto.setNome("João");
+        dto.setLogin("abc");
         dto.setTipo(TipoUsuario.USUARIO);
         dto.setEmail("email@email.com");
         dto.setSenha("senha");

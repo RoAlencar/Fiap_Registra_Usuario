@@ -10,6 +10,9 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class UsuarioEntityTest {
 
@@ -77,5 +80,64 @@ public class UsuarioEntityTest {
         assertThat(usuario.getLogin()).isEqualTo(usuarioEntity.getLogin());
         assertThat(usuario.getSenha()).isEqualTo(usuarioEntity.getSenha());
 
+    }
+
+    @Test
+    void deveConverterParaDomainCorretamente() {
+        // Arrange
+        Endereco endereco = Endereco.builder()
+                .logradouro("Rua das Flores")
+                .numero("123")
+                .complemento("Apto 45")
+                .cidade("São Paulo")
+                .cep("01000-000")
+                .build();
+
+        LocalDateTime dataAtualizacao = LocalDateTime.now();
+
+        UsuarioEntity entity = UsuarioEntity.builder()
+                .id(1L)
+                .tipo(TipoUsuario.USUARIO)
+                .nome("João da Silva")
+                .email("joao.silva@email.com")
+                .login("joaos")
+                .senha("123456")
+                .dataUltimaAtualizacao(dataAtualizacao)
+                .endereco(endereco)
+                .build();
+
+        // Act
+        Usuario domain = entity.toDomain();
+
+        // Assert
+        assertNotNull(domain);
+        assertEquals(entity.getId(), domain.getId());
+        assertEquals(entity.getTipo(), domain.getTipo());
+        assertEquals(entity.getNome(), domain.getNome());
+        assertEquals(entity.getEmail(), domain.getEmail());
+        assertEquals(entity.getLogin(), domain.getLogin());
+        assertEquals(entity.getSenha(), domain.getSenha());
+        assertEquals(entity.getDataUltimaAtualizacao(), domain.getDataUltimaAtualizacao());
+        assertEquals(entity.getEndereco(), domain.getEndereco());
+    }
+
+    @Test
+    void deveRetornarDomainComCamposNulosQuandoEntityNula() {
+        // Arrange
+        UsuarioEntity entity = new UsuarioEntity();
+
+        // Act
+        Usuario domain = entity.toDomain();
+
+        // Assert
+        assertNotNull(domain);
+        assertNull(domain.getId());
+        assertNull(domain.getTipo());
+        assertNull(domain.getNome());
+        assertNull(domain.getEmail());
+        assertNull(domain.getLogin());
+        assertNull(domain.getSenha());
+        assertNull(domain.getDataUltimaAtualizacao());
+        assertNull(domain.getEndereco());
     }
 }

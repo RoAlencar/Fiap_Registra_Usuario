@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class UsuarioTest {
 
@@ -68,7 +71,64 @@ public class UsuarioTest {
         assertThat(usuarioEntity.getLogin()).isEqualTo(login);
         assertThat(usuarioEntity.getSenha()).isEqualTo(senha);
         assertThat(usuarioEntity.getDataUltimaAtualizacao()).isEqualTo(dataUltimaAtualizacao);
+    }
 
+    @Test
+    void deveConverterParaEntityCorretamente() {
+        // Arrange
+        Endereco endereco = Endereco.builder()
+                .logradouro("Rua das Flores")
+                .numero("123")
+                .complemento("Apto 45")
+                .cidade("São Paulo")
+                .cep("01000-000")
+                .build();
 
+        LocalDateTime dataAtualizacao = LocalDateTime.now();
+
+        Usuario usuario = Usuario.builder()
+                .id(1L)
+                .tipo(TipoUsuario.USUARIO)
+                .nome("João da Silva")
+                .email("joao.silva@email.com")
+                .login("joaos")
+                .senha("123456")
+                .dataUltimaAtualizacao(dataAtualizacao)
+                .endereco(endereco)
+                .build();
+
+        // Act
+        UsuarioEntity entity = usuario.toEntity();
+
+        // Assert
+        assertNotNull(entity);
+        assertEquals(usuario.getId(), entity.getId());
+        assertEquals(usuario.getTipo(), entity.getTipo());
+        assertEquals(usuario.getNome(), entity.getNome());
+        assertEquals(usuario.getEmail(), entity.getEmail());
+        assertEquals(usuario.getLogin(), entity.getLogin());
+        assertEquals(usuario.getSenha(), entity.getSenha());
+        assertEquals(usuario.getDataUltimaAtualizacao(), entity.getDataUltimaAtualizacao());
+        assertEquals(usuario.getEndereco(), entity.getEndereco());
+    }
+
+    @Test
+    void deveRetornarEntityComCamposNulosQuandoUsuarioNulo() {
+        // Arrange
+        Usuario usuario = new Usuario();
+
+        // Act
+        UsuarioEntity entity = usuario.toEntity();
+
+        // Assert
+        assertNotNull(entity);
+        assertNull(entity.getId());
+        assertNull(entity.getTipo());
+        assertNull(entity.getNome());
+        assertNull(entity.getEmail());
+        assertNull(entity.getLogin());
+        assertNull(entity.getSenha());
+        assertNull(entity.getDataUltimaAtualizacao());
+        assertNull(entity.getEndereco());
     }
 }

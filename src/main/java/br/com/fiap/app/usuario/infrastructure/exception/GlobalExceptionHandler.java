@@ -122,7 +122,7 @@ public class GlobalExceptionHandler {
                         HttpServletRequest request) {
                 log.warn("[Usuario - Atualizar senha] O campo 'senha' é obrigatório");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                                .body(buildProblemDetail(HttpStatus.BAD_REQUEST, "O campo senha é obrigatório",
+                                .body(buildProblemDetail(HttpStatus.BAD_REQUEST, "O campo senha antiga é obrigatório",
                                                 request));
         }
 
@@ -131,7 +131,7 @@ public class GlobalExceptionHandler {
                         HttpServletRequest request) {
                 log.warn("[Usuario - Atualizar senha] A senha informada é inválida");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                                .body(buildProblemDetail(HttpStatus.BAD_REQUEST, "A senha informada é inválida",
+                                .body(buildProblemDetail(HttpStatus.BAD_REQUEST, "A senha antiga informada é inválida",
                                                 request));
         }
 

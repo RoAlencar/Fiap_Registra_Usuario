@@ -32,12 +32,13 @@ public class AtualizaUsuarioUseCase implements AtualizaUsuarioUseCasePort {
         Usuario usuarioExistente = usuarioRepositoryPort.findById(dto.getId())
                 .orElseThrow(UserNotFoundException::new);
 
-        if (isUnchanged(dto, usuarioExistente)) {
-            throw new NoChangesDetectedException();
-        }
 
         if (dto.getSenha() != null && !usuarioExistente.getSenha().equals(dto.getSenha())) {
             throw new PasswordUpdateNotAllowedException();
+        }
+
+        if (isUnchanged(dto, usuarioExistente)) {
+            throw new NoChangesDetectedException();
         }
 
         try {
