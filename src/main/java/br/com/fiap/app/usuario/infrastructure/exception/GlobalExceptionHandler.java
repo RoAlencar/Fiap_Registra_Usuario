@@ -26,6 +26,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.LoginPasswordInvalidException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.LoginUserNotFoundException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.validation.FieldError;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -213,6 +217,79 @@ public class GlobalExceptionHandler {
                                                 "Erro ao processar a requisição. Verifique o corpo do JSON enviado.",
                                                 request));
         }
+
+        @ExceptionHandler(LoginUserNotFoundException.class)
+            public ResponseEntity<ProblemDetail> handleLoginUserNotFound(LoginUserNotFoundException ex, HttpServletRequest request) {
+                log.warn("[Login] Credenciais inválidas");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(buildProblemDetail(HttpStatus.UNAUTHORIZED, "Credenciais inválidas", request));
+        }
+
+        @ExceptionHandler(LoginPasswordInvalidException.class)
+        public ResponseEntity<ProblemDetail> handleLoginPasswordInvalid(LoginPasswordInvalidException ex, HttpServletRequest request) {
+            log.warn("[Login] Credenciais inválidas");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(buildProblemDetail(HttpStatus.UNAUTHORIZED, "Credenciais inválidas", request));
+        }
+
+        /*
+
+        @ExceptionHandler(MethodArgumentNotValidException.class)
+            public ProblemDetail handleValidationErrors(MethodArgumentNotValidException ex, HttpServletRequest request) {
+                String detail = ex.getBindingResult().getFieldErrors().stream()
+                    .map(FieldError::getDefaultMessage)
+                    .collect(Collectors.joining("; "));
+
+                log.warn("[Validação] {}", detail);
+
+                return buildProblemDetail(HttpStatus.BAD_REQUEST, detail, request);
+    }
+
+
+         */
+
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ProblemDetail> handleValidationErrors(
+            MethodArgumentNotValidException ex, HttpServletRequest request) {
+
+        String detail = ex.getBindingResult().getFieldErrors().stream()
+                .map(this::getMessageForField)
+                .collect(Collectors.joining("; "));
+
+        log.warn("[Validação] {}", detail);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(buildProblemDetail(HttpStatus.BAD_REQUEST, detail, request));
+    }
+
+    // Método auxiliar para mapear campos → mensagens
+    private String getMessageForField(FieldError error) {
+        String field = error.getField();
+        String code = error.getCode();
+
+        if ("NotBlank".equals(code) || "NotNull".equals(code)) {
+            switch (field) {
+                case "nome": return "Nome é obrigatório";
+                case "email": return "Email é obrigatório";
+                case "login": return "Login é obrigatório";
+                case "senha": return "Senha é obrigatória";
+                case "endereco": return "Endereço é obrigatório";
+                case "logradouro": return "Logradouro é obrigatório";
+                case "numero": return "Número é obrigatório";
+                case "cidade": return "Cidade é obrigatória";
+                case "cep": return "CEP é obrigatório";
+                default: return "O campo '" + field + "' é obrigatório";
+            }
+        }
+
+        if ("Email".equals(code)) {
+            return "Email inválido";
+        }
+
+        return error.getDefaultMessage();
+    }
+
 
         private ProblemDetail buildProblemDetail(HttpStatus status, String detail, HttpServletRequest request) {
                 ProblemDetail problem = ProblemDetail.forStatus(status);

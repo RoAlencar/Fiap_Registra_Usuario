@@ -1,5 +1,6 @@
 package br.com.fiap.app.usuario.utils;
 
+import br.com.fiap.app.usuario.application.dto.request.EnderecoDto;
 import br.com.fiap.app.usuario.adapter.out.jpa.usuario.entities.UsuarioEntity;
 import br.com.fiap.app.usuario.application.dto.request.AtualizaUsuarioDto;
 import br.com.fiap.app.usuario.application.dto.request.CriarUsuarioDto;
@@ -10,6 +11,7 @@ import br.com.fiap.app.usuario.application.dto.response.UsuarioBaseResponse;
 import br.com.fiap.app.usuario.domain.Endereco;
 import br.com.fiap.app.usuario.domain.Usuario;
 import br.com.fiap.app.usuario.domain.enums.TipoUsuario;
+
 
 import java.time.LocalDateTime;
 
@@ -120,13 +122,13 @@ public class UsuarioTestUtils {
                 .login("user")
                 .senha("password")
                 .dataUltimaAtualizacao(LocalDateTime.of(2025, 10, 20, 15, 30))
-                .endereco(Endereco.builder()
-                        .logradouro("Av. Paulista")
-                        .numero("1000")
-                        .complemento("N/A")
-                        .cidade("São Paulo")
-                        .cep("01310-100")
-                        .build())
+                .endereco(EnderecoDto.builder()
+                          .logradouro("Av. Paulista")
+                          .numero("1000")
+                          .complemento("N/A")
+                          .cidade("São Paulo")
+                          .cep("01310-100")
+                          .build())
                 .build();
     }
 
