@@ -1,15 +1,45 @@
 {
 	"info": {
-		"_postman_id": "2c50a59b-5975-4de0-802f-105275545b28",
+		"_postman_id": "eb25900f-08cb-4240-a186-5f728fe4e17a",
 		"name": "Usuario-Fiap",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "49272771",
-		"_collection_link": "https://ademarkumabe81-5856538.postman.co/workspace/Ademar-Kumabe's-Workspace~a71ad5a8-a62e-4846-880b-cd7e22b14411/collection/49272771-2c50a59b-5975-4de0-802f-105275545b28?action=share&source=collection_link&creator=49272771"
+		"_exporter_id": "10199583"
 	},
 	"item": [
 		{
 			"name": "Cadastro de usuário válido",
 			"item": [
+				{
+					"name": "Exceptions",
+					"item": [
+						{
+							"name": "Cadastro usuario - Email já cadastrado",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"tipo\": \"USUARIO\",\r\n    \"nome\": \"ademar\",\r\n    \"email\": \"ademar@example.com\",\r\n    \"login\": \"ademar.mitsuo\",\r\n    \"senha\": \"1234\",\r\n    \"endereco\": {\r\n        \"logradouro\": \"Rua das Flores\",\r\n        \"numero\": \"45\",\r\n        \"complemento\": \"Apto 101\",\r\n        \"cidade\": \"São Paulo\",\r\n        \"cep\": \"01234-000\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/usuarios",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
 				{
 					"name": "Cadastro usuario",
 					"request": {
@@ -38,11 +68,8 @@
 				},
 				{
 					"name": "Cadastro proprietario",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -68,65 +95,40 @@
 			]
 		},
 		{
-			"name": "Tentativa de cadastro inválido",
-			"item": [
-				{
-					"name": "Campos obrigatórios faltando",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"tipo\": \"USUARIO\",\n  \"nome\": \"felipe\",\n  \"email\": \"felipe@example.com\",\n  \"login\": \"ademar.silva\",\n  \"senha\": \"\",\n  \"endereco\": {\n    \"logradouro\": \"Rua das Flores\",\n    \"numero\": \"123\",\n    \"complemento\": \"\",\n    \"cidade\": \"São Paulo\",\n    \"cep\": \"01234-567\"\n  }\n}\n\n\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}/usuarios",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"usuarios"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "E-mail duplicado",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"tipo\": \"USUARIO\",\n  \"nome\": \"Joao\",\n  \"email\": \"Caio@example.com\",\n  \"login\": \"caio.silva\",\n  \"senha\": \"1234\",\n  \"endereco\": {\n    \"logradouro\": \"Rua das Flores\",\n    \"numero\": \"45\",\n    \"complemento\": \"Apto 101\",\n    \"cidade\": \"São Paulo\",\n    \"cep\": \"01234-000\"\n  }\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}/usuarios",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"usuarios"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "Alteração de senha",
 			"item": [
+				{
+					"name": "Exceptions",
+					"item": [
+						{
+							"name": "Alteração de senha - Nova senha Igual a antiga",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"usuarioId\": 69,\n  \"senhaAtual\": \"string\",\n  \"novaSenha\": \"string\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/usuarios/senha",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"usuarios",
+										"senha"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
 				{
 					"name": "Alteração de senha com sucesso",
 					"request": {
@@ -134,34 +136,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"usuarioId\": 1,\n  \"senhaAtual\": \"1234\",\n  \"novaSenha\": \"NovaSenhaSegura@2025\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}/usuarios/senha",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"usuarios",
-								"senha"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Alteração de senha com erro",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"usuarioId\": 1,\n  \"senhaAtual\": \"1234\",\n  \"novaSenha\": \"NovaSenhaSegura@2026\"\n}",
+							"raw": "{\n  \"usuarioId\": 35,\n  \"senhaAtual\": \"1234\",\n  \"novaSenha\": \"NovaSenhaSegura@2025\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -249,13 +224,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}/usuarios/Lucas",
+							"raw": "{{baseURL}}/usuarios/Rodrigo",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"usuarios",
-								"Lucas"
+								"Rodrigo"
 							]
 						}
 					},
@@ -284,6 +259,45 @@
 			"name": "Validação de login",
 			"item": [
 				{
+					"name": "Exception",
+					"item": [
+						{
+							"name": "Credenciais invalidas",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"login\": \"ademar.mitsuo\",\n  \"senha\": \"aaaa\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/usuarios/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"usuarios",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "Login com sucesso",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -293,38 +307,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"login\": \"Felipe.Silva\",\n  \"senha\": \"1234\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/api/v1/usuarios/login",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"usuarios",
-								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Credenciais invalidas",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"login\": \"ademar.mitsuo\",\n  \"senha\": \"\"\n}",
+							"raw": "{\n  \"login\": \"string\",\n  \"senha\": \"string\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"

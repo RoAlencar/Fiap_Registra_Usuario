@@ -1,49 +1,87 @@
 <br>
 <h1 align="center">
-Fiap Registro de Usuário API
+🍽️ Fiap Registro de Usuário API
 </h1>
 <br>
 
-## 💬 Sobre o repositório
+## 💬 Sobre o Projeto
 
-Este repositório faz parte do projeto de desenvolvimento de um sistema de gestão unificado para restaurantes, criado em parceria com estudantes como solução colaborativa para reduzir custos e otimizar processos.
+Este repositório faz parte do **Tech Challenge - Fase 1** da pós-graduação em Arquitetura e Desenvolvimento Java (FIAP).
 
-Este módulo tem como objetivo fornecer a base para **autenticação e gerenciamento de usuários**, permitindo que clientes e administradores possam futuramente interagir de forma segura com as demais funcionalidades da plataforma.
+O projeto propõe o desenvolvimento de um **backend robusto** para o módulo de **autenticação e gerenciamento de usuários** de um sistema de gestão unificado para restaurantes — uma iniciativa colaborativa entre estabelecimentos para reduzir custos e otimizar processos operacionais.
+
+Este módulo fornece as bases para que **clientes e administradores (donos de restaurante)** possam interagir de forma segura com a plataforma, garantindo controle, rastreabilidade e integridade dos dados.
 
 A construção do projeto segue uma **abordagem por fases**, garantindo:
 
 - Evolução gradual das funcionalidades;
 - Flexibilidade para ajustes conforme feedback dos restaurantes e clientes;
-- Escalabilidade para suportar novos módulos (pedidos online, avaliações, gestão de cardápio, etc.).
+- Escalabilidade para integração com novos módulos (pedidos online, avaliações, gestão de cardápio, etc.).
 
 ---
 
-## 🏗️ Funcionalidades implementadas
+## 🏗️ Funcionalidades Implementadas
 
-- Camada de **Domain** (`Usuario` e `Endereco`) e **Entity** (`UsuarioEntity` com `Endereco` embutido);
-- **GlobalExceptionHandler** com exceptions customizadas;
-- **CRUD de Usuário**:
-  - Criar usuário
-  - Buscar usuário por Nome
-  - Atualizar usuário
-  - Deletar usuário
-- Validação de e-mail único no cadastro/atualização;
+- **Camada de Domain e Entity:**
+    - `Usuario` e `Endereco` como objetos de domínio;
+    - `UsuarioEntity` com `Endereco` embutido;
+- **GlobalExceptionHandler** com `ProblemDetail (RFC 7807)` e exceptions customizadas;
+- **CRUD de Usuário:**
+    - Criar usuário;
+    - Buscar usuário por nome;
+    - Atualizar usuário (endpoint distinto do de senha);
+    - Deletar usuário;
+- **Troca de senha** em endpoint separado;
+- **Validação de login** com checagem de credenciais;
+- **Validação de e-mail único** no cadastro/atualização;
+- **Registro automático da data da última alteração**;
+- **Versionamento de API** (`/api/v1/users`);
 - **Swagger/OpenAPI** configurado para documentação e testes interativos da API;
-- **Docker Compose** com PostgreSQL totalmente funcional;
-- Configuração de datasource via `application.yml` para integração com o banco de dados.
+- **Docker Compose** com PostgreSQL totalmente funcional.
 
 ---
 
-## 💻 Swagger / OpenAPI
+## 💾 Estrutura do Banco de Dados
 
-A API está **documentada com Swagger**, permitindo que você:
+Banco de dados relacional **PostgreSQL**, executado via **Docker Compose**.
 
-- Consulte todos os endpoints disponíveis;
-- Veja os parâmetros e tipos esperados;
-- Teste requisições diretamente pelo navegador.
+**Entidade principal:** `usuario`
 
-Acesse o Swagger UI em:  
-[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+| Campo | Tipo | Descrição |
+|--------|------|------------|
+| id | UUID | Identificador único |
+| nome | String | Nome completo do usuário |
+| email | String | E-mail único |
+| login | String | Nome de usuário |
+| senha | String | Senha criptografada |
+| data_ultima_alteracao | Timestamp | Data da última atualização |
+| endereco_rua | String | Rua |
+| endereco_numero | String | Número |
+| endereco_cidade | String | Cidade |
+| endereco_cep | String | CEP |
+
+---
+
+## 🌐 Endpoints Principais
+
+| Método | Endpoint              | Descrição |
+|---------|-----------------------|-----------|
+| `POST` | `/api/v1/users`       | Cadastrar novo usuário |
+| `GET` | `/api/v1/users`       | Listar todos os usuários |
+| `GET` | `/api/v1/users/{nome}` | Buscar usuário por nome |
+| `PUT` | `/api/v1/users/{id}`  | Atualizar dados do usuário |
+| `PATCH` | `/api/v1/users/senha` | Alterar senha |
+| `DELETE` | `/api/v1/users/{id}`  | Deletar usuário |
+| `POST` | `/api/v1/users/login` | Validar login e senha |
+
+---
+
+## 💻 Documentação Swagger
+
+A API está **documentada com Swagger/OpenAPI**, permitindo visualizar e testar os endpoints diretamente no navegador.
+
+Acesse:  
+👉 [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 
 ---
 
@@ -56,6 +94,12 @@ Acesse o Swagger UI em:
 
 ---
 
+## 🚀 Como Rodar a Aplicação
+
+1. **Suba o banco de dados via Docker Compose:**
+```bash
+   docker-compose up -d
+````
 ## 🚀 Como rodar a aplicação
 
 1. **Inicie o banco de dados** via Docker Compose:
@@ -77,8 +121,41 @@ http://localhost:8080/
 
 ---
 
-## 📝 Observações importantes
+## 🧪 Testes com Postman
+O projeto inclui uma **coleção Postman** (postman_collection.json) cobrindo os principais cenários:
 
-- O método **findByName** do repositório JPA foi atualizado para **findByNome** para refletir corretamente o campo da entidade **UsuarioEntity**.
-- Use case e controller foram ajustados para validação de duplicidade de e-mail
-- Swagger atualizado com a versão mais recente do **springdoc-openapi**.
+* Cadastro de usuário válido e inválido (e-mail duplicado, campos obrigatórios);
+* Atualização de dados com sucesso e erro;
+* Alteração de senha (endpoint exclusivo);
+* Busca por nome;
+* Validação de login.
+ ---
+## 🧱 Arquitetura da Aplicação
+A arquitetura segue o padrão **Camadas (Domain, Application, Infrastructure)**, alinhada aos princípios de **SOLID**  e **Clean Architecture**.
+
+```
+src
+├── main
+│   ├── java
+│   │   └── br.com.fiap.registro
+│   │       ├── domain
+│   │       ├── entity
+│   │       ├── controller
+│   │       ├── service
+│   │       └── exception
+│   └── resources
+│       ├── application.yml
+│       └── schema.sql
+└── test
+```
+---
+🧩 Tecnologias Utilizadas
+
+* Java 21
+* Spring Boot 3
+* Spring Data JPA
+* Swagger / OpenAPI
+* PostgreSQL
+* Docker & Docker Compose
+* JUnit 5 (opcional)
+* ProblemDetail RFC 7807
