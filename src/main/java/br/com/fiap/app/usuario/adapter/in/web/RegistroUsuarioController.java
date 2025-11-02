@@ -41,6 +41,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.LoginPasswordInvalidException;
+import br.com.fiap.app.usuario.infrastructure.exception.custom.LoginUserNotFoundException;
+import br.com.fiap.app.usuario.application.dto.response.LoginResponse;
+
+import br.com.fiap.app.usuario.application.dto.request.LoginDto;
+import br.com.fiap.app.usuario.application.port.LoginUseCasePort;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -55,6 +62,7 @@ public class RegistroUsuarioController {
     private final BuscaUsuarioUseCasePort buscaUsuarioUseCasePort;
     private final CriarUsuarioUseCasePort criarUsuarioUseCasePort;
     private final DeletaUsuarioUseCasePort deletaUsuarioUseCasePort;
+    private final LoginUseCasePort loginUseCasePort;
 
     @GetMapping
     public ResponseEntity<List<BuscaUsuarioResponse>> buscaTodosUsuarios() {
@@ -79,7 +87,7 @@ public class RegistroUsuarioController {
     }
 
     @PutMapping
-    public ResponseEntity<AtualizaUsuarioResponse> atualizaUsuario(@RequestBody AtualizaUsuarioDto dto)
+    public ResponseEntity<AtualizaUsuarioResponse> atualizaUsuario(@Valid @RequestBody AtualizaUsuarioDto dto)
             throws UserNotFoundException, ModificaUsuarioException, NoChangesDetectedException,
             PasswordUpdateNotAllowedException {
         log.info("[Usuario - Atualiza Usuario] Iniciando processo.");
@@ -101,5 +109,15 @@ public class RegistroUsuarioController {
         log.info("[Usuario - Deleta Usuario] Iniciando processo.");
         deletaUsuarioUseCasePort.deletaUsuario(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+
+
+    @GetMapping("/login")
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginDto dto)
+            throws LoginUserNotFoundException, LoginPasswordInvalidException {
+        log.info("[Usuario - Login] Iniciando processo.");
+        LoginResponse response = loginUseCasePort.login(dto);
+        return ResponseEntity.ok(response);
     }
 }

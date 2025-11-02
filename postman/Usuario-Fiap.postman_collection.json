@@ -1,0 +1,344 @@
+{
+	"info": {
+		"_postman_id": "eb25900f-08cb-4240-a186-5f728fe4e17a",
+		"name": "Usuario-Fiap",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10199583"
+	},
+	"item": [
+		{
+			"name": "Cadastro de usuário válido",
+			"item": [
+				{
+					"name": "Exceptions",
+					"item": [
+						{
+							"name": "Cadastro usuario - Email já cadastrado",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"tipo\": \"USUARIO\",\r\n    \"nome\": \"ademar\",\r\n    \"email\": \"ademar@example.com\",\r\n    \"login\": \"ademar.mitsuo\",\r\n    \"senha\": \"1234\",\r\n    \"endereco\": {\r\n        \"logradouro\": \"Rua das Flores\",\r\n        \"numero\": \"45\",\r\n        \"complemento\": \"Apto 101\",\r\n        \"cidade\": \"São Paulo\",\r\n        \"cep\": \"01234-000\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/usuarios",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Cadastro usuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"tipo\": \"USUARIO\",\n  \"nome\": \"ademar\",\n  \"email\": \"ademar@example.com\",\n  \"login\": \"ademar.mitsuo\",\n  \"senha\": \"1234\",\n  \"endereco\": {\n    \"logradouro\": \"Rua das Flores\",\n    \"numero\": \"45\",\n    \"complemento\": \"Apto 101\",\n    \"cidade\": \"São Paulo\",\n    \"cep\": \"01234-000\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/usuarios",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastro proprietario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"tipo\": \"PROPRIETARIO\",\n  \"nome\": \"Joao2\",\n  \"email\": \"joao2@example.com\",\n  \"login\": \"joao2.silva\",\n  \"senha\": \"123\",\n  \"endereco\": {\n    \"logradouro\": \"Rua das Flores\",\n    \"numero\": \"123\",\n    \"complemento\": \"Apto 101\",\n    \"cidade\": \"São Paulo\",\n    \"cep\": \"01234-567\"\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/usuarios",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Alteração de senha",
+			"item": [
+				{
+					"name": "Exceptions",
+					"item": [
+						{
+							"name": "Alteração de senha - Nova senha Igual a antiga",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"usuarioId\": 69,\n  \"senhaAtual\": \"string\",\n  \"novaSenha\": \"string\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/usuarios/senha",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"usuarios",
+										"senha"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Alteração de senha com sucesso",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"usuarioId\": 35,\n  \"senhaAtual\": \"1234\",\n  \"novaSenha\": \"NovaSenhaSegura@2025\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/usuarios/senha",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"usuarios",
+								"senha"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Atualização de dados do usuário",
+			"item": [
+				{
+					"name": "Atualização com sucesso",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"nome\": \"Caio\",\n    \"email\": \"Caio-atualizado@example.com\",\n    \"login\": \"caio.silva\",\n    \"endereco\": {\n        \"logradouro\": \"Rua das Flores\",\n        \"numero\": \"85\",\n        \"complemento\": \"Apto 101\",\n        \"cidade\": \"São Paulo\",\n        \"cep\": \"01234-000\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/usuarios",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualização com erro",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"nome\": \"\",\n    \"email\": \"Caio-atualizado2@example.com\",\n    \"login\": \"caio.silva\",\n    \"endereco\": {\n        \"logradouro\": \"\",\n        \"numero\": \"\",\n        \"complemento\": \"Apto 101\",\n        \"cidade\": \"São Paulo\",\n        \"cep\": \"01234-000\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/usuarios",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Busca de usuarios",
+			"item": [
+				{
+					"name": "Busca de usuários pelo nome",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/usuarios/Rodrigo",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"usuarios",
+								"Rodrigo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Busca todos os usuarios",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/usuarios",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Validação de login",
+			"item": [
+				{
+					"name": "Exception",
+					"item": [
+						{
+							"name": "Credenciais invalidas",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"login\": \"ademar.mitsuo\",\n  \"senha\": \"aaaa\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/usuarios/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"usuarios",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Login com sucesso",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"login\": \"string\",\n  \"senha\": \"string\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/usuarios/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"usuarios",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "",
+			"type": "default"
+		}
+	]
+}

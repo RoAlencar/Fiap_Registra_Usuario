@@ -18,4 +18,6 @@ public interface UsuarioRepositoryPort {
     Usuario save(Usuario usuario);
 
     void deleteById(Long id);
+
+    Optional<Usuario> findByLogin(String login);
 }

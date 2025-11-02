@@ -48,4 +48,10 @@ public class UsuarioJpaRepositoryPortAdapter implements UsuarioRepositoryPort {
     public void deleteById(Long id) {
         usuarioJpaRepository.deleteById(id);
     }
+
+    @Override
+    public Optional<Usuario> findByLogin(String login) {
+        return usuarioJpaRepository.findByLogin(login)
+                .map(UsuarioEntity::toDomain);
+    }
 }
